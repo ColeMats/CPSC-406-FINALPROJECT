@@ -1,0 +1,11 @@
+Taps:
+1. Labor (Having to play to earn money)
+2. Resources (Having buildings earn money over time or through interaction)
+3. Time (Get resources over time)
+
+
+Sinks:
+1. Upgrade character/weapons/armor to be stronger
+2. Upgrade buildings/resources
+3. Cosmetic Upgrades
+4. Unlock new weapons, characters, resources, etc.

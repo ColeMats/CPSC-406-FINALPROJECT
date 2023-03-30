@@ -5,12 +5,12 @@ Tree::Tree() {}
 //eventually change to standard starting board, and set in constructor
 void Tree::setRoot(TreeNode* node) {
     root = node;
-    all_moves[node->getData().begin()->second] = node;
+    all_moves.push_back(node);
 }
 
-void Tree::addChild(TreeNode* parent, TreeNode* child) {
-    parent->addChild(child);
-    all_moves[child->getData().begin()->second] = child;
+void Tree::addChild(TreeNode* parent, std::string move, TreeNode* child) {
+    parent->add_future_move(move, child);
+    all_moves.push_back(child);
 }
 
 TreeNode* Tree::getRoot() {
@@ -22,6 +22,6 @@ TreeNode* Tree::getRoot() {
 * to access a single value, use:
 * node->getData().at("key")
 */
-std::unordered_map<std::string, TreeNode*> Tree::get_all_moves() {
+std::vector<TreeNode*> Tree::get_all_moves() {
     return all_moves;
 }

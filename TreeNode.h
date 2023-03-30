@@ -2,6 +2,10 @@
 #define TREENODE_H
 
 #include <unordered_map>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 class TreeNode {
 private:
@@ -17,7 +21,7 @@ public:
     std::unordered_map<std::string, std::string> get_piece_locations();
 
     //future move getter and setter
-    void add_future_move(TreeNode* node);
+    void add_future_move(std::string key, TreeNode* node);
     std::unordered_map<std::string, TreeNode*> get_future_moves();
 
     //print methods for debug

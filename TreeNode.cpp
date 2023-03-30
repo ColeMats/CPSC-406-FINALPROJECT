@@ -15,8 +15,8 @@ std::unordered_map<std::string, std::string> TreeNode::get_piece_locations() {
     return piece_locations;
 }
 
-void TreeNode::add_future_move(TreeNode* node) {
-    future_moves[node->getData().begin()->second] = node;
+void TreeNode::add_future_move(std::string key, TreeNode* node) {
+    future_moves[key] = node;
 }
 
 /* 
@@ -29,16 +29,16 @@ std::unordered_map<std::string, TreeNode*> TreeNode::get_future_moves() {
 }
 
 //debug print statements
-void print_possible_moves() const {
+void TreeNode::print_possible_moves() {
     cout << "Possible moves:\n";
-    for (const auto& pair : future_moves_) {
+    for (auto& pair : future_moves) {
         cout << pair.first << "\n";
     }
 }
 
-void print_piece_locations() const {
+void TreeNode::print_piece_locations() {
     cout << "Piece locations:\n";
-    for (const auto& pair : piece_locations_) {
+    for (auto& pair : piece_locations) {
         cout << pair.first << ": " << pair.second << "\n";
     }
 }

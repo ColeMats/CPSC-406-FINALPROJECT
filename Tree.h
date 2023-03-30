@@ -2,30 +2,20 @@
 #define TREE_H
 
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include "TreeNode.h"
 
 class Tree {
-public:
-    explicit Tree(std::string data);
-
-    std::string getData() const;
-    int getHashmapValue(std::string key) const;
-    Tree* getChild(int index) const;
-
-    void setData(std::string data);
-    void setHashmapValue(std::string key, int value);
-    Tree* addChild(std::string childData);
-    void removeChild(int index);
-
-    void print(int depth = 0) const;
-
-    ~Tree();
-
 private:
-    std::string data;
-    std::unordered_map<std::string, int> hashmap;
-    std::vector<Tree*> branches;
+    TreeNode* root;
+    std::unordered_map<std::string, TreeNode*> all_moves;
+
+public:
+    Tree();
+    void setRoot(TreeNode* node);
+    void addChild(TreeNode* parent, TreeNode* child);
+    TreeNode* getRoot();
+    std::unordered_map<std::string, TreeNode*> get_all_moves();
 };
 
-#endif // TREE_H
+#endif /* TREE_H */

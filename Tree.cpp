@@ -1,69 +1,27 @@
-#include <iostream>
-#include "tree.h"
+#include "Tree.h"
 
-Tree::Tree(std::string data) : data(data) {}
+Tree::Tree() {}
 
-std::string Tree::getData() const {
-    return data;
+//eventually change to standard starting board, and set in constructor
+void Tree::setRoot(TreeNode* node) {
+    root = node;
+    all_moves[node->getData().begin()->second] = node;
 }
 
-int Tree::getHashmapValue(std::string key) const {
-    auto it = hashmap.find(key);
-    if (it != hashmap.end()) {
-        return it->second;
-    } else {
-        return 0;
-    }
+void Tree::addChild(TreeNode* parent, TreeNode* child) {
+    parent->addChild(child);
+    all_moves[child->getData().begin()->second] = child;
 }
 
-Tree* Tree::getChild(int index) const {
-    if (index < branches.size()) {
-        return branches[index];
-    } else {
-        return nullptr;
-    }
+TreeNode* Tree::getRoot() {
+    return root;
 }
 
-void Tree::setData(std::string data) {
-    this->data = data;
-}
-
-void Tree::setHashmapValue(std::string key, int value) {
-    hashmap[key] = value;
-}
-
-Tree* Tree::addChild(std::string childData) {
-    Tree* child = new Tree(childData);
-    branches.push_back(child);
-    return child;
-}
-
-void Tree::removeChild(int index) {
-    if (index < branches.size()) {
-        Tree* child = branches[index];
-        branches.erase(branches.begin() + index);
-        delete child;
-    }
-}
-
-void Tree::print(int depth) const {
-    for (int i = 0; i < depth; i++) {
-        std::cout << "\t";
-    }
-    std::cout << "- " << data << std::endl;
-    for (const auto& p : hashmap) {
-        for (int i = 0; i < depth; i++) {
-            std::cout << "\t";
-        }
-        std::cout << "\t[" << p.first << "] = " << p.second << std::endl;
-    }
-    for (const auto& child : branches) {
-        child->print(depth + 1);
-    }
-}
-
-Tree::~Tree() {
-    for (Tree* child : branches) {
-        delete child;
-    }
+/* 
+* get_all_moves function returns the entire data map and not just a single value.
+* to access a single value, use:
+* node->getData().at("key")
+*/
+std::unordered_map<std::string, TreeNode*> Tree::get_all_moves() {
+    return all_moves;
 }

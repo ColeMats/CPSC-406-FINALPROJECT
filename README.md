@@ -1,9 +1,9 @@
 # Chess AI
 
 ## Students Information
-- Alan Lu, Cole Matsueda
-- 2378209, 2343554
-- allu@chapman.edu, cmatsueda@chapman.edu
+- Alan Lu, Cole Matsueda, Christopher Isidro
+- 2378209, 2343554, 2370110
+- allu@chapman.edu, cmatsueda@chapman.edu, cisidro@chapman.edu
 - CPSC406-02
 
 ## Source Files
@@ -19,3 +19,6 @@
 
 ## Instructions
 - N/A
+
+## FOR ALAN <3
+- 

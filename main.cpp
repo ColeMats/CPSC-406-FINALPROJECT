@@ -12,6 +12,7 @@
 Game* current_game = NULL;
 
 
+
 //---------------------------------------------------------------------------------------
 // Helper
 // Auxiliar functions to determine if a move is valid, etc
@@ -648,6 +649,184 @@ void movePiece(void)
    return;
 }
 
+void engineMovePiece(std::string from, std::string to)
+{
+   std::string to_record;
+
+   // Get user input for the piece they want to move
+   cout << "Choose piece to be moved. (example: A1 or b2): ";
+
+   std::string move_from = from;
+   //getline(cin, move_from);
+
+   // if ( move_from.length() > 2 )
+   // {
+   //    createNextMessage("You should type only two characters (column and row)\n");
+   //    return;
+   // }
+
+   Chess::Position present;
+   present.iColumn = move_from[0];
+   present.iRow    = move_from[1];
+
+  
+   // Put in the string to be logged
+   to_record += present.iColumn;
+   to_record += present.iRow;
+   to_record += "-";
+
+   // Convert column from ['A'-'H'] to [0x00-0x07]
+   present.iColumn = present.iColumn - 'A';
+
+   // Convert row from ['1'-'8'] to [0x00-0x07]
+   present.iRow  = present.iRow  - '1';
+
+   char chPiece = current_game->getPieceAtPosition(present.iRow, present.iColumn);
+   cout << "Piece is " << char(chPiece) << "\n";
+
+   if ( Chess::WHITE_PIECE == current_game->getCurrentTurn() )
+   {
+      if ( false == Chess::isWhitePiece(chPiece) )
+      {
+         createNextMessage("It is WHITE's turn and you picked a BLACK piece\n");
+         return;
+      }
+   }
+   else
+   {
+      if ( false == Chess::isBlackPiece(chPiece) )
+      {
+         createNextMessage("It is BLACK's turn and you picked a WHITE piece\n");
+         return;
+      }
+   }
+
+   // ---------------------------------------------------
+   // Get user input for the square to move to
+   // ---------------------------------------------------
+  
+   std::string move_to = to;
+
+
+   // ---------------------------------------------------
+   // Did the user pick a valid house to move?
+   // Must check if:
+   // - It's inside the board (A1-H8)
+   // - The move is valid
+   // ---------------------------------------------------
+   Chess::Position future;
+   future.iColumn = move_to[0];
+   future.iRow    = move_to[1];
+
+   
+
+   // Put in the string to be logged
+   to_record += future.iColumn;
+   to_record += future.iRow;
+
+   // Convert columns from ['A'-'H'] to [0x00-0x07]
+   future.iColumn = future.iColumn - 'A';
+
+   // Convert row from ['1'-'8'] to [0x00-0x07]
+   future.iRow = future.iRow - '1';
+
+
+   // Is that move allowed?
+   Chess::EnPassant  S_enPassant  = { 0 };
+   Chess::Castling   S_castling   = { 0 };
+   Chess::Promotion  S_promotion  = { 0 };
+
+   if ( false == isMoveValid(present, future, &S_enPassant, &S_castling, &S_promotion) )
+   {
+      createNextMessage("[Invalid] Piece can not move to that square!\n");
+      return;
+   }
+   
+   // ---------------------------------------------------
+   // Promotion: user most choose a piece to
+   // replace the pawn
+   // ---------------------------------------------------
+   if ( S_promotion.bApplied == true )
+   {
+      cout << "Promote to (Q, R, N, B): ";
+      std::string piece;
+      getline(cin, piece);
+
+      if ( piece.length() > 1 )
+      {
+         createNextMessage("You should type only one character (Q, R, N or B)\n");
+         return;
+      }
+
+      char chPromoted = toupper(piece[0]);
+
+      if ( chPromoted != 'Q' && chPromoted != 'R' && chPromoted != 'N' && chPromoted != 'B' )
+      {
+         createNextMessage("Invalid character.\n");
+         return;
+      }
+
+      S_promotion.chBefore = current_game->getPieceAtPosition(present.iRow, present.iColumn);
+
+      if (Chess::WHITE_PLAYER == current_game->getCurrentTurn())
+      {
+         S_promotion.chAfter = toupper(chPromoted);
+      }
+      else
+      {
+         S_promotion.chAfter = tolower(chPromoted);
+      }
+
+      to_record += '=';
+      to_record += toupper(chPromoted); // always log with a capital letter
+   }
+
+   // ---------------------------------------------------
+   // Log the move: do it prior to making the move
+   // because we need the getCurrentTurn()
+   // ---------------------------------------------------
+   current_game->logMove( to_record );
+
+   // ---------------------------------------------------
+   // Make the move
+   // ---------------------------------------------------
+   makeTheMove(present, future, &S_enPassant, &S_castling, &S_promotion);
+
+   // ---------------------------------------------------------------
+   // Check if this move we just did put the oponent's king in check
+   // Keep in mind that player turn has already changed
+   // ---------------------------------------------------------------
+   if ( true == current_game->playerKingInCheck() )
+   {
+      if (true == current_game->isCheckMate() )
+      {
+         if (Chess::WHITE_PLAYER == current_game->getCurrentTurn())
+         {
+            appendToNextMessage("Checkmate! Black wins the game!\n");
+         }
+         else
+         {
+            appendToNextMessage("Checkmate! White wins the game!\n");
+         }
+      }
+      else
+      { 
+         // Add to the string with '+=' because it's possible that
+         // there is already one message (e.g., piece captured)
+         if (Chess::WHITE_PLAYER == current_game->getCurrentTurn())
+         {
+            appendToNextMessage("White king is in check!\n");
+         }
+         else
+         {
+            appendToNextMessage("Black king is in check!\n");
+         }
+      }
+   }
+
+   return;
+}
+
 void saveGame(void)
 {
    string file_name;
@@ -818,15 +997,21 @@ int main()
    // Clear screen an print the logo
    clearScreen();
    printLogo();
+   cout << "Which color do you want to be? (W/B)" << endl;
+   char colorPick;
+   cin >> colorPick;
 
    string input = "";
-
+   
+   int didItRun = 0;
+   std::cin.ignore();
    while( bRun )
    {
-      printMessage();
+      printMessage(); 
       printMenu();
 
       // Get input from user
+      
       cout << "Type here: ";
       getline(cin, input);
 
@@ -862,8 +1047,17 @@ int main()
                   }
                   else
                   {
+                     if(didItRun == 0 && colorPick == 'B'){
+                        
+                        movePiece();
+                        //FOR ENGINE MOVE: CALL FUNCTION engineMovePiece(string, string) where strings are from and to respectively
+                        printBoard( *current_game);
+                        printSituation(*current_game);
+                        didItRun++;
+                     }
                      movePiece();
                      //clearScreen();
+                     //TALLY YOUR AI SHOULD MAKE ITS MOVE RIGHT AFTER movePiece()
                      printLogo();
                      printSituation( *current_game );
                      printBoard( *current_game );

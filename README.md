@@ -18,7 +18,10 @@
 - N/A
 
 ## Instructions
-- N/A
+- to run chess game:
+    - switch to source folder
+    - g++ *.cpp 
+    - ./a.out
 
 ## FOR ALAN <3
 - 

@@ -26,6 +26,20 @@
     - ./a.out
 
 ## CHANGELOG
+03/31/2023 - Alan
+-   Implemented classes for Tree and TreeNode with the following features:
+    - TreeNode:
+        - Contains a hashmap for piece location with a string (piece) input and int output.
+        - Contains a hashmap for future moves with a string (future move) input and a pointer to a TreeNode output.
+        - Has getter and setter methods for both hashmaps.
+        - Provides print methods to display all possible moves and piece locations.
+    - Tree:
+        - Provides a method to retrieve the root node.
+        - Provides a method to print all possible moves by displaying the children nodes and their future move hash inputs.
+        - Provides a getSuccessors method.
+- Created Test for Tree class
+    - is in the Test Directory
+
 03/30/2023 - Chris & Cole
 - uploaded first version of working chess engine 
 
@@ -59,3 +73,8 @@ Our goal for the MVP was to have a chess engine that plays moves based on tree g
 - re-implement player color choice
 - develop move generation through tree data structure
 - alpha-beta pruning
+- After the tree is properly implemented, we will be switching teams
+    - Alan and Chris will be working on the Front end
+        - We will trying to implement the front end in Unreal Engine since we are both game dev minors
+        - 
+    - Cole and Tally will be working on the back end 

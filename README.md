@@ -39,7 +39,7 @@
     - reomves inputs (cin) for variables
     - takes new parameters (instead of void) 2 strings representing "from" and "to" respectively (starting and ending positions given by AI)
 
-03/31/2023 - Tally
+03/31/2023 to 04/02/2023 - Tally
 - removed ability for player to choose playing white or black
     - player automatically assigned white pieces
     - AI automatically assigned black pieces

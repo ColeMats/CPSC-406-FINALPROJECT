@@ -1,5 +1,7 @@
 #pragma once
 #include "includes.h"
+#include "Tree.h"
+#include "TreeNode.h"
 
 class Chess
 {
@@ -141,6 +143,14 @@ public:
    bool wouldKingBeInCheck( char chPiece, Position present, Position future, EnPassant* S_enPassant );
 
    Position findKing( int iColor );
+
+   std::string getCompMove(void);
+
+   std::string getPossibleComputerMoves(std::string position);
+
+   std::string getPawnMove(Position currP);
+   std::string getRookMove(Position currP);
+   std::string getBishopMove(Position currP);
 
    void changeTurns( void );
 

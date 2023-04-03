@@ -13,6 +13,7 @@ void Tree::addChild(TreeNode* parent, std::string move, TreeNode* child) {
     all_moves.push_back(child);
 }
 
+
 TreeNode* Tree::getRoot() {
     return root;
 }
@@ -25,3 +26,5 @@ TreeNode* Tree::getRoot() {
 std::vector<TreeNode*> Tree::get_all_moves() {
     return all_moves;
 }
+
+

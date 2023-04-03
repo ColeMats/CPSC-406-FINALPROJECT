@@ -4,12 +4,15 @@
 #include "chess.h"
 
 #include "debug.h"
+#include "Tree.h"
 
 #include <iostream>
 //---------------------------------------------------------------------------------------
 // Global variable
 //---------------------------------------------------------------------------------------
 Game* current_game = NULL;
+int computerColor;
+
 
 
 
@@ -649,38 +652,41 @@ void movePiece(void)
    return;
 }
 
-void engineMovePiece(std::string from, std::string to)
+// std::string getCompMove(void){
+//    TreeNode *comp_pieces = new TreeNode();
+//    for(int i =0; i<8;++i){
+//       for(int j = 0; j<8; ++j){
+//          char tempPiece = current_game->getPieceAtPosition(i,j);
+//          if(islower(tempPiece)){
+//             string loc = "";
+//             loc += (char) (i+'A');
+//             loc += (char) (j + '1');
+//             string p = "";
+//             p += tempPiece;
+//             comp_pieces->set_piece_locations(loc,p);
+
+//          }
+//       }
+//    }
+//    return comp_pieces->choose_rand_key();
+
+// }
+
+
+void engineMovePiece()
 {
-   std::string to_record;
+   // get computer move
+   std::string compMove = current_game->getCompMove();
+   
+   // add move to log
+   std::string to_record = compMove;
 
-   // Get user input for the piece they want to move
-   cout << "Choose piece to be moved. (example: A1 or b2): ";
-
-   std::string move_from = from;
-   //getline(cin, move_from);
-
-   // if ( move_from.length() > 2 )
-   // {
-   //    createNextMessage("You should type only two characters (column and row)\n");
-   //    return;
-   // }
-
+   // get positions from and to
    Chess::Position present;
-   present.iColumn = move_from[0];
-   present.iRow    = move_from[1];
+   Chess::Position future;
+   current_game->parseMove(compMove, &present, &future);
 
-  
-   // Put in the string to be logged
-   to_record += present.iColumn;
-   to_record += present.iRow;
-   to_record += "-";
-
-   // Convert column from ['A'-'H'] to [0x00-0x07]
-   present.iColumn = present.iColumn - 'A';
-
-   // Convert row from ['1'-'8'] to [0x00-0x07]
-   present.iRow  = present.iRow  - '1';
-
+   // get piece 
    char chPiece = current_game->getPieceAtPosition(present.iRow, present.iColumn);
    cout << "Piece is " << char(chPiece) << "\n";
 
@@ -700,35 +706,6 @@ void engineMovePiece(std::string from, std::string to)
          return;
       }
    }
-
-   // ---------------------------------------------------
-   // Get user input for the square to move to
-   // ---------------------------------------------------
-  
-   std::string move_to = to;
-
-
-   // ---------------------------------------------------
-   // Did the user pick a valid house to move?
-   // Must check if:
-   // - It's inside the board (A1-H8)
-   // - The move is valid
-   // ---------------------------------------------------
-   Chess::Position future;
-   future.iColumn = move_to[0];
-   future.iRow    = move_to[1];
-
-   
-
-   // Put in the string to be logged
-   to_record += future.iColumn;
-   to_record += future.iRow;
-
-   // Convert columns from ['A'-'H'] to [0x00-0x07]
-   future.iColumn = future.iColumn - 'A';
-
-   // Convert row from ['1'-'8'] to [0x00-0x07]
-   future.iRow = future.iRow - '1';
 
 
    // Is that move allowed?
@@ -825,6 +802,7 @@ void engineMovePiece(std::string from, std::string to)
    }
 
    return;
+   
 }
 
 void saveGame(void)
@@ -997,9 +975,22 @@ int main()
    // Clear screen an print the logo
    clearScreen();
    printLogo();
-   cout << "Which color do you want to be? (W/B)" << endl;
-   char colorPick;
-   cin >> colorPick;
+
+   // ------------------
+   // temp comment out
+   // ------------------
+   // cout << "Which color do you want to be? (W/B)" << endl;
+   // char colorPick;
+   // cin >> colorPick;
+
+   // // tally changes
+   // if(colorPick == 'W')
+   //    computerColor = Chess::BLACK_PLAYER;
+   // else 
+   //    computerColor = Chess::WHITE_PLAYER;
+   // // tally changes end
+
+
 
    string input = "";
    
@@ -1047,17 +1038,22 @@ int main()
                   }
                   else
                   {
-                     if(didItRun == 0 && colorPick == 'B'){
+                     // if(didItRun == 0 && colorPick == 'B'){
+                     if(didItRun == 0){
                         
                         movePiece();
-                        //FOR ENGINE MOVE: CALL FUNCTION engineMovePiece(string, string) where strings are from and to respectively
+                        printBoard( *current_game);
+                        printSituation(*current_game);
+                        engineMovePiece();
                         printBoard( *current_game);
                         printSituation(*current_game);
                         didItRun++;
                      }
                      movePiece();
+                     printBoard( *current_game);
+                     printSituation(*current_game);
+                     engineMovePiece();
                      //clearScreen();
-                     //TALLY YOUR AI SHOULD MAKE ITS MOVE RIGHT AFTER movePiece()
                      printLogo();
                      printSituation( *current_game );
                      printBoard( *current_game );

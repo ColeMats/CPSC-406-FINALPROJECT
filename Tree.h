@@ -14,7 +14,9 @@ public:
     Tree();
     void setRoot(TreeNode* node);
     void addChild(TreeNode* parent, std::string move, TreeNode* child);
+    // void addChild(TreeNode* parent, TreeNode* child);
     TreeNode* getRoot();
+    // TreeNode* get_rand_move();
     std::vector<TreeNode*> get_all_moves();
 };
 

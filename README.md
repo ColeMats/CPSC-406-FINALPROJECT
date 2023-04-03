@@ -18,7 +18,8 @@
 - Game not yet tested beyond a few moves
 
 ## References
-- N/A
+- Chess Engine within console
+    - https://github.com/jeromevonk/chess_console
 
 ## Instructions
 - to run chess game:
@@ -75,6 +76,6 @@ Our goal for the MVP was to have a chess engine that plays moves based on tree g
 - alpha-beta pruning
 - After the tree is properly implemented, we will be switching teams
     - Alan and Chris will be working on the Front end
-        - We will trying to implement the front end in Unreal Engine since we are both game dev minors
-        - 
+        - Will trying to implement the front end in Unreal Engine since both are game dev minors
     - Cole and Tally will be working on the back end 
+        - Will be implementing the above features

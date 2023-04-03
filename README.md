@@ -9,6 +9,11 @@
 ## Source Files
 - Tree.cpp
 - Tree.h
+- chess.cpp
+- chess.h
+- resource.h
+- user_interface.cpp
+- user_interface.h
 - main.cpp
 
 ## Known Issues/Deviations
@@ -16,6 +21,7 @@
 - Move generation not complete. The computer can move only pawns, rooks, or bishops. Movement of these pieces is limited, and does not consider all valid moves by each piece.
 - use of Tree data structure for move generation not yet implemented
 - Game not yet tested beyond a few moves
+- 
 
 ## References
 - Chess Engine within console
@@ -68,6 +74,8 @@
     
 ## PROGRESS SINCE WEEK 4
 Our goal for the MVP was to have a chess engine that plays moves based on tree generation, either randomly or using alpha-beta pruning. While we have not fully developed tree generation and random/calculated move selection, we were able to create a chess engine that is playable in the console. Our chess engine, at present, has AI move generation, but the move generator is not complete. It also does not consider all valid moves for a given piece. Instead, the first valid move found for each piece being considered is the only move associated with that piece. The move generator and tree generation still needs work in order to make the AI make good moves, not just valid moves.
+
+This current version (as of 04.02.2023) includes the chess engine as pvp instead of player vs AI.  The move generation is a work in progress but has not been implemented into the chess engine.  Right now, the game is set up to be player vs player, with move generations being made in another class.  This is a step in our future plan to properly implement the generated moves into the engine so that the game can be played as player vs AI.  While we did fall short of our MVP, the process gave us a better perspective on how we want to continue the rest of the project.
 ## FUTURE PLANS 
 - NEED to make a new feature where player and AI are identified and make use of getCurrentTurn to see which method should be called (movePiece || engineMovePiece)
 - get board to print properly

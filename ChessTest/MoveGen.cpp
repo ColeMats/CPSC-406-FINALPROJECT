@@ -12,6 +12,11 @@ MoveGen:: MoveGen(Board &board){
     setBoard(board);
 }
 
+MoveGen::MoveGen(Board &board, Color activeColor){
+    board.setActivePlayer(activeColor);
+    setBoard(board);
+}
+
 MoveGen::~MoveGen(){
 
 
@@ -39,6 +44,14 @@ void MoveGen::printMoves(){
     }
 }
 
+void MoveGen::printLegalMoves(){
+    std::cout << m_legalMoves.size() << std::endl;
+    for(auto legal : m_legalMoves){
+        legal.printPieceType();
+        std::cout << toNotation(legal.getFrom()) << "-" << toNotation(legal.getTo()) << std::endl;
+    }
+}
+
 std::string MoveGen::toNotation(Position pos){
     std::string notation = "";
     notation += pos.iCol + 'A';
@@ -46,95 +59,175 @@ std::string MoveGen::toNotation(Position pos){
     return notation;
 }
 
-void MoveGen::genPawnSingleMoves(Board &board, std::vector<Position> pawnPos){ // computer moves -- start @ i=6 
-    for(int i=0;i<pawnPos.size(); ++i){
-        Position from = pawnPos[i];
+void MoveGen::genBlackPawnSingleMoves(Board &board, Position pos){ // computer moves -- start @ i=6 
+    
+    if(board.inBounds(pos.iRow-1, pos.iCol) && board.getPieceAtLocation(pos.iRow-1, pos.iCol) == 0x20){
         Position to;
-        if((from.iRow > 0) && (board.isEmptySquare(from.iRow-1, from.iCol))){
-            to.iRow = from.iRow -1;
-            to.iCol = from.iCol;
-            m_moves.push_back(Move(from, to, PAWN));
+        to.iRow = pos.iRow - 1;
+        to.iCol = pos.iCol;
+        m_moves.push_back(Move(pos, to, PAWN));
+    }
+    
+}
+
+void MoveGen::genBlackPawnDoubleMoves(Board &board, Position pos){
+    
+    if(pos.iRow == 6){
+        if(board.getPieceAtLocation(pos.iRow-1, pos.iCol) == 0x20 && board.getPieceAtLocation(pos.iRow-2, pos.iCol) == 0x20){
+            Position to;
+            to.iRow = pos.iRow -2;
+            to.iCol = pos.iCol;
+            m_moves.push_back(Move(pos, to, PAWN));
         }
-        else if(from.iRow == 0){
-            to.iRow = from.iRow -1;
-            to.iCol = from.iCol;
-            // generate pawn promotion
-            m_moves.push_back(Move(from,to, PAWN)); // temporary -- move added to list in promotion function
+    }
+}
+
+void MoveGen::genBlackPawnLeftAttack(Board &board, Position pos){
+    
+    if(board.inBounds(pos.iRow-1, pos.iCol-1) && isupper(board.getPieceAtLocation(pos.iRow-1, pos.iCol-1))){
+        Position to;
+        to.iRow = pos.iRow - 1;
+        to.iCol = pos.iCol -1;
+        Move move = Move(pos, to, PAWN);
+        move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+        m_moves.push_back(move);
+    }
+    
+}
+void MoveGen::genBlackPawnRightAttack(Board &board, Position pos){
+    
+    if(board.inBounds(pos.iRow-1, pos.iCol + 1) && isupper(board.getPieceAtLocation(pos.iRow-1, pos.iCol+1))){
+        Position to;
+        to.iRow = pos.iRow-1;
+        to.iCol = pos.iCol+1;
+        Move move = Move(pos, to, PAWN);
+        move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+        m_moves.push_back(move);
+    }
+}
+
+void MoveGen::genWhitePawnSingleMoves(Board &board, Position pos){ // computer moves -- start @ i=6 
+    
+    if(board.inBounds(pos.iRow+1, pos.iCol) && board.getPieceAtLocation(pos.iRow+1, pos.iCol) == 0x20){
+        Position to;
+        to.iRow = pos.iRow - 1;
+        to.iCol = pos.iCol;
+        m_moves.push_back(Move(pos, to, PAWN));
+    }
+    
+}
+
+void MoveGen::genWhitePawnDoubleMoves(Board &board, Position pos){
+    
+    if(pos.iRow == 1){
+        if(board.getPieceAtLocation(pos.iRow+1, pos.iCol) == 0x20 && board.getPieceAtLocation(pos.iRow+2, pos.iCol) == 0x20){
+            Position to;
+            to.iRow = pos.iRow +2;
+            to.iCol = pos.iCol;
+            m_moves.push_back(Move(pos, to, PAWN));
+        }
+    }
+}
+
+void MoveGen::genWhitePawnLeftAttack(Board &board, Position pos){
+    
+    if(board.inBounds(pos.iRow+1, pos.iCol-1) && islower(board.getPieceAtLocation(pos.iRow+1, pos.iCol-1))){
+        Position to;
+        to.iRow = pos.iRow + 1;
+        to.iCol = pos.iCol -1;
+        Move move = Move(pos, to, PAWN);
+        move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+        m_moves.push_back(move);
+    }
+    
+}
+void MoveGen::genWhitePawnRightAttack(Board &board, Position pos){
+    
+    if(board.inBounds(pos.iRow+1, pos.iCol + 1) && islower(board.getPieceAtLocation(pos.iRow+1, pos.iCol+1))){
+        Position to;
+        to.iRow = pos.iRow+1;
+        to.iCol = pos.iCol+1;
+        Move move = Move(pos, to, PAWN);
+        move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+        m_moves.push_back(move);
+    }
+}
+
+
+
+
+void MoveGen::genMoves(Board &board){
+    // board.logAllPiecesOnBoard();
+    if(board.getActivePlayer() == BLACK){
+        genBlackPawnMoves(board);
+        
+    }
+    else if(board.getActivePlayer() == WHITE){
+        genWhitePawnMoves(board);
+    }
+    genRookMoves(board);
+        genBishopMoves(board);
+        genKnightMoves(board);
+        genKingMoves(board);
+    // else if(board.getActivePlayer() == WHITE){
+    //     genWhitePawnMoves(board);
+    // }
+
+    genLegalMoves(board);
+    
+
+}
+
+void MoveGen::genLegalMoves(Board &board){
+    m_legalMoves.reserve(m_moves.size());
+    for(auto move: m_moves){
+        Board tempBoard = board;
+        tempBoard.doMove(move);
+        // tempBoard.printBoard();
+        if(!tempBoard.colorIsInCheck(tempBoard.getActivePlayer())){
+            m_legalMoves.push_back(move);
         }
     }
     
 }
 
-void MoveGen::genPawnDoubleMoves(Board &board, std::vector<Position> pawnPos){
-    for(int i=0; i<pawnPos.size(); ++i){
-        Position from = pawnPos[i];
-        // std::cout << from.iRow << std::endl;
-        Position to;
-        if(from.iRow == 6){
-            to.iRow = from.iRow - 2;
-            to.iCol = from.iCol;
-            if((board.isEmptySquare(to.iRow, to.iCol)) && (board.isEmptySquare(from.iRow -1, from.iCol-1))){
-                m_moves.push_back(Move(from,to,PAWN));
-            }
-        }
+MoveList MoveGen::getLegalMoves(){
+    return m_legalMoves;
+}
+
+void MoveGen::genBlackPawnMoves(Board &board){
+    std::vector<Position> pawnLoc = board.getPawnLocations(BLACK);
+    for(int i=0; i<pawnLoc.size(); ++i){
+        genBlackPawnSingleMoves(board, pawnLoc[i]);
+        genBlackPawnDoubleMoves(board, pawnLoc[i]);
+        genBlackPawnLeftAttack(board, pawnLoc[i]);
+        genBlackPawnRightAttack(board, pawnLoc[i]);
     }
+    
+
 }
 
-void MoveGen::genPawnLeftAttack(Board &board, std::vector<Position> pawnPos){
-    for(int i=0;i<pawnPos.size();++i){
-        Position from = pawnPos[i];
-        if(from.iCol > 0){
-            // have to add attack promotions (attack & promotion) and enpassant
-            if(isupper(board.getPieceAtLocation(from.iRow-1, from.iCol-1))){
-                Position to;
-                to.iRow = from.iRow - 1;
-                to.iCol = from.iCol - 1;
-                Move move = Move(from, to, PAWN);
-                move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
-                m_moves.push_back(move);
-            }
-        }
+void MoveGen::genWhitePawnMoves(Board &board){
+    std::vector<Position> pawnLoc = board.getPawnLocations(WHITE);
+    for(int i=0; i<pawnLoc.size(); ++i){
+        genWhitePawnSingleMoves(board, pawnLoc[i]);
+        genWhitePawnDoubleMoves(board, pawnLoc[i]);
+        genWhitePawnLeftAttack(board, pawnLoc[i]);
+        genWhitePawnRightAttack(board, pawnLoc[i]);
     }
-}
-void MoveGen::genPawnRightAttack(Board &board, std::vector<Position> pawnPos){
-    for(int i=0;i<pawnPos.size();++i){
-        Position from = pawnPos[i];
-        if(from.iCol < 7){
-            // have to add attack promotions (attack & promotion) and enpassant
-            if(isupper(board.getPieceAtLocation(from.iRow-1, from.iCol+1))){
-                Position to;
-                to.iRow = from.iRow - 1;
-                to.iCol = from.iCol + 1;
-                Move move = Move(from, to, PAWN);
-                move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
-                m_moves.push_back(move);
-            }
-        }
-    }
-}
-
-void MoveGen::genMoves(Board &board){
-    // board.logAllPiecesOnBoard();
-
-    genPawnMoves(board);
-    genRookMoves(board);
-    genBishopMoves(board);
-    genKnightMoves(board);
 
 }
 
-void MoveGen::genPawnMoves(Board &board){
-    std::vector<Position> pawnLoc = board.getPawnLocations();
-    genPawnSingleMoves(board, pawnLoc);
-    genPawnDoubleMoves(board, pawnLoc);
-    genPawnLeftAttack(board, pawnLoc);
-    genPawnRightAttack(board, pawnLoc);
-
+void MoveGen::genQueenMoves(Board &board){
+    Position queenPos = board.getQueenLocations(board.getActivePlayer());
+    genVerticalSlideMoves(board, queenPos, QUEEN);
+    genHorizontalSlideMoves(board, queenPos, QUEEN);
+    genDiagonalSlidemoves(board, queenPos, QUEEN);
 }
 
 void MoveGen::genRookMoves(Board &board){
-    std::vector<Position> rookPos = board.getRookLocations();
-    std::cout << rookPos.size() << std::endl;
+    std::vector<Position> rookPos = board.getRookLocations(board.getActivePlayer());
+    // std::cout << rookPos.size() << std::endl;
     for(int i=0;i<rookPos.size();++i){
         genVerticalSlideMoves(board, rookPos[i], ROOK);
         genHorizontalSlideMoves(board, rookPos[i], ROOK);
@@ -142,7 +235,7 @@ void MoveGen::genRookMoves(Board &board){
 }
 
 void MoveGen::genBishopMoves(Board &board){
-    std::vector<Position> bishopPos = board.getBishopLocations();
+    std::vector<Position> bishopPos = board.getBishopLocations(board.getActivePlayer());
     // std::cout << bishopPos.size() << std::endl;
     for(int i=0;i<bishopPos.size();++i){
         genDiagonalSlidemoves(board, bishopPos[i], BISHOP);
@@ -150,144 +243,62 @@ void MoveGen::genBishopMoves(Board &board){
 }
 
 void MoveGen::genKnightMoves(Board &board){
-    std::vector<Position> knightPos = board.getKnightLocations();
+    std::vector<Position> knightPos = board.getKnightLocations(board.getActivePlayer());
     for(int i=0;i<knightPos.size();++i){
         genKnightHops(board, knightPos[i]);
+    }
+}
+
+void MoveGen::genKingMoves(Board &board){
+    Position kingPos = board.getKingLocations(board.getActivePlayer());
+    Position to;
+    Color victimColor = board.getOppositeColor(board.getActivePlayer());
+    for(int i=0; i<8;++i){
+        to.iRow = kingPos.iRow + kingRowOffsets[i];
+        to.iCol = kingPos.iCol + kingColOffsets[i];
+        if(board.inBounds(to.iRow, to.iCol)){
+            if(board.getColorAtLoc(to.iRow, to.iCol) == victimColor){
+                Move move = Move(kingPos, to, KING);
+                move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+                m_moves.push_back(move);
+            }
+            else if(board.isEmptySquare(to.iRow, to.iCol)){
+                Move move = Move(kingPos, to, KING);
+                m_moves.push_back(move);
+            }
+        }
     }
 }
 
 
 //super long ugh
 void MoveGen::genKnightHops(Board &board, Position pos){
+    int row = pos.iRow;
+    int col = pos.iCol;
     
-    if(pos.iRow - 2 >= 0){
-        if(pos.iCol - 1 >= 0){
+    for(int i=0; i<8; ++i){
+        if(board.inBounds(row + knighRowOffsets[i], col + knightColOffsets[i])){
             Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow-2, pos.iCol-1))){
-                to.iRow = pos.iRow -2;
-                to.iCol = pos.iCol -1;
+            to.iRow = row + knighRowOffsets[i];
+            to.iCol = col + knightColOffsets[i];
+            if(board.isEmptySquare(to.iRow, to.iCol)){
                 Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow-2, pos.iCol-1));
                 m_moves.push_back(move);
             }
-            else if(board.isEmptySquare(pos.iRow-2, pos.iCol -1)){
-                to.iRow = pos.iRow -2;
-                to.iCol = pos.iCol -1;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-        if(pos.iCol + 1 <= 7){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow-2, pos.iCol+1))){
-                to.iRow = pos.iRow -2;
-                to.iCol = pos.iCol +1;
+            else if(board.getActivePlayer() == BLACK && isupper(board.getPieceAtLocation(to.iRow, to.iCol))){
                 Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow-2, pos.iCol+1));
+                move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
                 m_moves.push_back(move);
             }
-            else if(board.isEmptySquare(pos.iRow-2, pos.iCol +1)){
-                to.iRow = pos.iRow -2;
-                to.iCol = pos.iCol +1;
-                m_moves.push_back(Move(pos, to, KNIGHT));
+            else if(board.getActivePlayer() == WHITE && islower(board.getPieceAtLocation(to.iRow, to.iCol))){
+                Move move = Move(pos, to, KNIGHT);
+                move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+                m_moves.push_back(move);
             }
         }
+        
     }
-    if(pos.iRow - 1>= 0){
-        if(pos.iCol - 2 >= 0){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow-1, pos.iCol-2))){
-                to.iRow = pos.iRow -1;
-                to.iCol = pos.iCol -2;
-                Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow-1, pos.iCol-2));
-                m_moves.push_back(move);
-            }
-            else if(board.isEmptySquare(pos.iRow-1, pos.iCol -2)){
-                to.iRow = pos.iRow -1;
-                to.iCol = pos.iCol -2;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-        if(pos.iCol + 2 >= 0){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow-1, pos.iCol+2))){
-                to.iRow = pos.iRow -1;
-                to.iCol = pos.iCol +2;
-                Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow-1, pos.iCol+2));
-                m_moves.push_back(move);
-            }
-            else if(board.isEmptySquare(pos.iRow-1, pos.iCol +2)){
-                to.iRow = pos.iRow -1;
-                to.iCol = pos.iCol +2;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-    }
-    if(pos.iRow + 2 <= 7){
-        if(pos.iCol - 1 >= 0){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow+2, pos.iCol-1))){
-                to.iRow = pos.iRow +2;
-                to.iCol = pos.iCol -1;
-                Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow+2, pos.iCol-1));
-                m_moves.push_back(move);
-            }
-            else if(board.isEmptySquare(pos.iRow+2, pos.iCol -1)){
-                to.iRow = pos.iRow +2;
-                to.iCol = pos.iCol -1;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-        if(pos.iCol + 1 >= 0){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow+2, pos.iCol+1))){
-                to.iRow = pos.iRow +2;
-                to.iCol = pos.iCol +1;
-                Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow+2, pos.iCol+1));
-                m_moves.push_back(move);
-            }
-            else if(board.isEmptySquare(pos.iRow+2, pos.iCol +1)){
-                to.iRow = pos.iRow +2;
-                to.iCol = pos.iCol +1;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-    }
-    if(pos.iRow + 1<= 7){
-        if(pos.iCol - 2 >= 0){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow+1, pos.iCol-2))){
-                to.iRow = pos.iRow +1;
-                to.iCol = pos.iCol -2;
-                Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow+1, pos.iCol-2));
-                m_moves.push_back(move);
-            }
-            else if(board.isEmptySquare(pos.iRow+1, pos.iCol -2)){
-                to.iRow = pos.iRow +1;
-                to.iCol = pos.iCol -2;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-        if(pos.iCol + 2 >= 0){
-            Position to;
-            if(isupper(board.getPieceAtLocation(pos.iRow+1, pos.iCol+2))){
-                to.iRow = pos.iRow +1;
-                to.iCol = pos.iCol +2;
-                Move move = Move(pos, to, KNIGHT);
-                move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow+1, pos.iCol+2));
-                m_moves.push_back(move);
-            }
-            else if(board.isEmptySquare(pos.iRow+1, pos.iCol +2)){
-                to.iRow = pos.iRow +1;
-                to.iCol = pos.iCol +2;
-                m_moves.push_back(Move(pos, to, KNIGHT));
-            }
-        }
-    }
+
 }
 
 void MoveGen::genVerticalSlideMoves(Board &board, Position pos, PieceType type){
@@ -296,15 +307,16 @@ void MoveGen::genVerticalSlideMoves(Board &board, Position pos, PieceType type){
     to.iCol = pos.iCol;
     bool cont = true;
     int i = 1;
+    Color victimColor = board.getOppositeColor(board.getActivePlayer());
     while((row-i >= 0) && cont){ // moving forward (to white side)
         if((board.isEmptySquare(row -i, pos.iCol))){
             to.iRow = row - i;
             m_moves.push_back(Move(pos, to, type));
             i++;
         }
-        else if(isupper(board.getPieceAtLocation(row-i, pos.iCol))){
+        else if(board.getColorAtLoc(row-i, pos.iCol) == victimColor){
             to.iRow = row - i;
-            Move move = Move(pos, to), type;
+            Move move = Move(pos, to, type);
             move.setCapturedPieceType(board.getPieceAtLocation(row-i, pos.iCol));
             m_moves.push_back(move);
             cont = false;
@@ -321,7 +333,7 @@ void MoveGen::genVerticalSlideMoves(Board &board, Position pos, PieceType type){
             m_moves.push_back(Move(pos, to, type));
             i++;
         }
-        else if(isupper(board.getPieceAtLocation(row+i, pos.iCol))){
+        else if(board.getColorAtLoc(row+i, pos.iCol) == victimColor){
             to.iRow = row + i;
             Move move = Move(pos, to, type);
             move.setCapturedPieceType(board.getPieceAtLocation(row+i, pos.iCol));
@@ -339,13 +351,14 @@ void MoveGen::genHorizontalSlideMoves(Board &board, Position pos, PieceType type
     to.iRow = pos.iRow;
     bool cont = true;
     int i = 1;
+    Color victimColor = board.getOppositeColor(board.getActivePlayer());
     while((col-i >= 0) && cont){ // moving forward (to white side)
         if((board.isEmptySquare(pos.iRow, col-i))){
             to.iCol = col - i;
             m_moves.push_back(Move(pos, to, type));
             i++;
         }
-        else if(isupper(board.getPieceAtLocation(pos.iRow, col-i))){
+        else if(board.getColorAtLoc(pos.iRow, col-i) == victimColor){
             to.iCol = col - i;
             Move move = Move(pos, to, type);
             move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow, col-i));
@@ -364,7 +377,7 @@ void MoveGen::genHorizontalSlideMoves(Board &board, Position pos, PieceType type
             m_moves.push_back(Move(pos, to, type));
             i++;
         }
-        else if(isupper(board.getPieceAtLocation(pos.iRow, col+i))){
+        else if(board.getColorAtLoc(pos.iRow, col+i) == victimColor){
             to.iCol = col + i;
             Move move = Move(pos, to, type);
             move.setCapturedPieceType(board.getPieceAtLocation(pos.iRow, col+i));
@@ -384,11 +397,12 @@ void MoveGen::genDiagonalSlidemoves(Board &board, Position pos, PieceType type){
     int colOffset = 1;
     bool cont = true;
     bool leftback, leftfront, rightback, rightforward = true;
+    Color victimColor = board.getOppositeColor(board.getActivePlayer());
     while(cont){
         Position to;
         if((row+rowOffset) <= 7){
             if((col + colOffset <= 7) && rightback){
-                if(isupper(board.getPieceAtLocation(row+rowOffset, col+colOffset))){
+                if(board.getColorAtLoc(row+rowOffset, col+colOffset) == victimColor){
                     to.iRow = row+rowOffset;
                     to.iCol = col+colOffset;
                     Move move = Move(pos, to, type);
@@ -409,7 +423,7 @@ void MoveGen::genDiagonalSlidemoves(Board &board, Position pos, PieceType type){
                 rightback = false;
             }
             if((col-colOffset >= 0) && leftback){
-                if(isupper(board.getPieceAtLocation(row+rowOffset, col-colOffset))){
+                if(board.getColorAtLoc(row+rowOffset, col-colOffset) == victimColor){
                     to.iRow = row+rowOffset;
                     to.iCol = col+-colOffset;
                     Move move = Move(pos, to, type);
@@ -432,7 +446,7 @@ void MoveGen::genDiagonalSlidemoves(Board &board, Position pos, PieceType type){
         }
         if((row-rowOffset >= 0)){
             if((col + colOffset <= 7) && rightforward){
-                if(isupper(board.getPieceAtLocation(row-rowOffset, col+colOffset))){
+                if(board.getColorAtLoc(row-rowOffset, col+colOffset) == victimColor){
                     to.iRow = row-rowOffset;
                     to.iCol = col+colOffset;
                     Move move = Move(pos, to, type);
@@ -453,7 +467,7 @@ void MoveGen::genDiagonalSlidemoves(Board &board, Position pos, PieceType type){
                 rightforward = false;
             }
             if((col-colOffset >= 0) && leftfront){
-                if(isupper(board.getPieceAtLocation(row-rowOffset, col-colOffset))){
+                if(board.getColorAtLoc(row-rowOffset, col-colOffset) == victimColor){
                     to.iRow = row-rowOffset;
                     to.iCol = col+-colOffset;
                     Move move = Move(pos, to, type);

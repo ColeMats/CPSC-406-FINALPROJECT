@@ -3,10 +3,12 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <limits.h>
 
 enum Color{
     WHITE,
-    BLACK
+    BLACK,
+    EMPTY
 };
 
 enum PieceType{
@@ -18,9 +20,22 @@ enum PieceType{
     KING
 };
 
+enum Direction{
+    DIAGONAL,
+    HORIZONTAL,
+    VERTICAL,
+    LSHAPE, // knight movement
+    PATTACK //pawn attack direction
+};
+
 struct Position {
     int iRow;
     int iCol;
 };
+
+const int INF = std::numeric_limits<int>::max();
+
+
+
 
 #endif

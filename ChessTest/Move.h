@@ -15,19 +15,53 @@
 
 class Move{
     public:
+        /*
+        Default constructor
+        initalizes m_value to 0, captured piece to 0x20, and to/from positions
+        */
         Move();
-        // might have to add piece type once that's figured out
+        /*
+        Overloaded constructor
+        * @param Position from and Position to
+        */
         Move(Position from, Position to);
+        /*
+        Overloaded constructor
+        * @param Positions to and from, PieceType
+        */
         Move(Position from, Position to, PieceType type);
+
         ~Move(){};
 
+        /*
+        Accessor and Mutator for Position variables m_to and m_from
+        */
         Position getFrom();
         Position getTo();
+
+        /*
+        Accessor and mutator for captured piece (char)
+        * setCapturedPieceType also sets move value of piece
+        */
         void setCapturedPieceType(char piece);
         char getCapturedPieceType();
+
+        /*
+        Accessor/mutator for move  value
+        * pawn = 1, rook = 5, knight = 3, bishop = 3, queen = 9
+        */
         void setMoveValue(int value);
         int getMoveValue();
+
+        /*
+        Accessor for PieceType of moved piece
+        */
         PieceType getPieceType();
+
+        /*
+        Printing piece type of moved piece
+        * for testing mostly
+        */
         void printPieceType();
 
     private:

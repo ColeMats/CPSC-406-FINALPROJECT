@@ -4,17 +4,24 @@
 Move::Move(){
     m_from = Position();
     m_to = Position();
+    m_capturedType = 0x20;
+    m_value = 0;
 }
+
 
 Move::Move(Position from, Position to){
     m_from = from;
     m_to = to;
+    m_capturedType = 0x20;
+    m_value = 0;
 }
 
 Move::Move(Position from, Position to, PieceType type){
     m_from = from;
     m_to = to;
     m_pieceType = type;
+    m_capturedType = 0x20;
+    m_value = 0;
 }
 
 Position Move::getFrom(){
@@ -27,6 +34,30 @@ Position Move::getTo(){
 
 void Move::setCapturedPieceType(char piece){
     m_capturedType = piece;
+    switch (piece){
+        case 'p':
+        case 'P':
+            m_value = 1;
+            break;
+        case 'r':
+        case 'R':
+            m_value = 5;
+            break;
+        case 'n':
+        case 'N':
+            m_value = 3;
+            break;
+        case 'b':
+        case 'B':
+            m_value = 3;
+            break;
+        case 'q':
+        case 'Q':
+            m_value = 9;
+            break;
+        default:
+            break;
+    }
 }
 
 char Move::getCapturedPieceType(){

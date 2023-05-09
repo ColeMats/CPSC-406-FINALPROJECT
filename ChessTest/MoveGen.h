@@ -1,3 +1,6 @@
+#ifndef MOVEGEN_H
+#define MOVEGEN_H
+
 #include <iostream>
 // #include "Tree.h"
 // #include "TreeNode.h"
@@ -30,6 +33,7 @@ class MoveGen{
         * overloaded constructor
         */
         MoveGen(Board &board);
+        MoveGen(Board &board, Color activeColor);
         ~MoveGen();
         
         
@@ -49,7 +53,10 @@ class MoveGen{
         functions for testing correctness of move generation
         */
         void printMoves();
+
+        void printLegalMoves();
         std::string toNotation(Position pos);
+        std::string selectMove();
 
         /*
         * calls functions to generate all possible moves
@@ -58,22 +65,35 @@ class MoveGen{
         */ 
         void genMoves(Board &board);
 
+        void genLegalMoves(Board &board);
+
+        MoveList getLegalMoves();
+
         /*
         * generates all possible pawn moves
         */
-        void genPawnMoves(Board &board);
+        void genBlackPawnMoves(Board &board);
+
+        void genWhitePawnMoves(Board &board);
 
         /*
         * functions for pawn moves (single, double, and if attack possible)
         */
-        void genPawnSingleMoves(Board &board, std::vector<Position> pawnPos);
-        void genPawnDoubleMoves(Board &board, std::vector<Position> pawnPos);
-        void genPawnLeftAttack(Board &board, std::vector<Position> pawnPos);
-        void genPawnRightAttack(Board &board, std::vector<Position> pawnPos);
+        void genBlackPawnSingleMoves(Board &board, Position pos);
+        void genBlackPawnDoubleMoves(Board &board, Position pos);
+        void genBlackPawnLeftAttack(Board &board, Position pos);
+        void genBlackPawnRightAttack(Board &board, Position pos);
+
+        void genWhitePawnSingleMoves(Board &board, Position pos);
+        void genWhitePawnDoubleMoves(Board &board, Position pos);
+        void genWhitePawnLeftAttack(Board &board, Position pos);
+        void genWhitePawnRightAttack(Board &board, Position pos);
 
         void genRookMoves(Board &board);
         void genBishopMoves(Board &board);
         void genKnightMoves(Board &board);
+        void genQueenMoves(Board &board);
+        void genKingMoves(Board &board);
 
         /*
         * for knight moves
@@ -93,6 +113,13 @@ class MoveGen{
     private:
         MoveList m_moves;
         MoveList m_legalMoves;
+
+        int kingRowOffsets[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int kingColOffsets[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+        int knighRowOffsets[8] = {2, 2, 1, -1, -2, -2, -1, 1};
+        int knightColOffsets[8] = {-1, 1, 2, 2, 1, -1, -2, -2};
+
         // char m_board[8][8];
 
         // std::unordered_map<char, int> pieceValues;
@@ -101,3 +128,5 @@ class MoveGen{
         
 
 };
+
+#endif

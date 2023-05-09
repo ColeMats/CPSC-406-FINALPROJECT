@@ -37,3 +37,7 @@ is there a piece it its way, etc), identifying capture moves, and so on.
 I haven't incorporated any enpassant or castling moves (because I don't understand them) but they should be easy enough to integrate if time permits.
 
 If we're feeling ambitious, can do movelist ordering before doing alpha-beta search (reduces search and search time)
+
+ALSO:
+- need to delete Game.h and Game.cpp (don't use)
+- haven't used the Tree or TreeNode data structures because the depth-first seach doesn't need it

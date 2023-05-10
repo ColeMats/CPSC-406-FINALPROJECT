@@ -6,7 +6,7 @@
 #include <string.h>
 #include <iostream>
 #include <vector>
-
+#include "Tree.h"
 #include "defs.h"
 #include "Move.h"
 
@@ -156,14 +156,15 @@ class Board{
         int kingRowOffsets[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
         int kingColOffsets[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
 
+        // implementing tree functions
+        TreeNode* getTreeNode();
+        void setTreeNode(TreeNode* treeNode);
 
     private:
         char m_board[8][8];
         Color activePlayer;
         bool queenActive;
-              
-    
-
+        TreeNode* m_treeNode;
 };
 
 #endif

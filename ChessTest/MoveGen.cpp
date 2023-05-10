@@ -166,16 +166,10 @@ void MoveGen::genMoves(Board &board){
         genWhitePawnMoves(board);
     }
     genRookMoves(board);
-        genBishopMoves(board);
-        genKnightMoves(board);
-        genKingMoves(board);
-    // else if(board.getActivePlayer() == WHITE){
-    //     genWhitePawnMoves(board);
-    // }
-
+    genBishopMoves(board);
+    genKnightMoves(board);
+    genKingMoves(board);
     genLegalMoves(board);
-    
-
 }
 
 void MoveGen::genLegalMoves(Board &board){
@@ -184,7 +178,7 @@ void MoveGen::genLegalMoves(Board &board){
         Board tempBoard = board;
         tempBoard.doMove(move);
         // tempBoard.printBoard();
-        if(!tempBoard.colorIsInCheck(tempBoard.getActivePlayer())){
+        if(!tempBoard.colorIsInCheck(tempBoard.getActivePlayer())&& move.getCapturedPieceType() != 'k' && move.getCapturedPieceType() != 'K'){
             m_legalMoves.push_back(move);
         }
     }

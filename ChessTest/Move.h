@@ -64,6 +64,7 @@ class Move{
         */
         void printPieceType();
 
+        std::string toNotation() const;
     private:
         Position m_from;
         Position m_to;

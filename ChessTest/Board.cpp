@@ -431,3 +431,10 @@ Position Board::getKingLocations(Color pieceColor){
     return kingPos;
 }
 
+TreeNode* Board::getTreeNode() {
+    return m_treeNode;
+}
+
+void Board::setTreeNode(TreeNode* treeNode) {
+    m_treeNode = treeNode;
+}

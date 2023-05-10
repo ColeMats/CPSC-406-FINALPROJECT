@@ -3,6 +3,7 @@
 #define SEARCH_H
 
 #include "MoveGen.h"
+#include "Tree.h"
 #include <iostream>
 
 class Search{
@@ -21,8 +22,8 @@ class Search{
         // p=1, b=3, n=3, r=5, q=9
         int countMaterialsOnBoard(Board &board, Color color);
 
-        // void rootMax(Board &board, int depth);
-
+        //void rootMax(Board &board, int depth);
+        int minimax(Board &board, int depth, int alpha, int beta, Color color);
 
     private:
         static const int DEFAULT_DEPTH = 7;
@@ -37,7 +38,7 @@ class Search{
         void rootMax(Board &board, int depth);
 
         // maxiplayer = true false --> BLACK == true, WHITE == false (based on next player's move)
-        void miniMax(Board &board, int depth, bool maxiPlayer, int alpha, int beta);
+        Tree m_tree;
 
 };
 

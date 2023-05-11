@@ -124,9 +124,6 @@ class MoveGen{
 
         // std::unordered_map<char, int> pieceValues;
 
-
-        
-
 };
 
 #endif

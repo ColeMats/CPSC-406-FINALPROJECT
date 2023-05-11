@@ -4,7 +4,9 @@
 // basically have this file run through all the choices, pick the best move, and return the string "move-move" format via getBestMove();
 
 AI::AI(char board[8][8]){
+    cout << "prompt 0";
     Board currBoard(board, BLACK);
+    m_search = Search(currBoard); // Initialize the Search object with currBoard
     m_AIMove = "";
     start(currBoard);
 }
@@ -42,14 +44,20 @@ void AI::getAIMoveBasic(Board &board){
     m_AIMove += moveGen.toNotation(bestMove.getFrom());
     m_AIMove += "-";
     m_AIMove += moveGen.toNotation(bestMove.getTo());
+    
 }
 
 void AI::getAIMoveMinimax(Board &board){
-    if(board.getActivePlayer() == WHITE){
-        m_search.rootMax(board, 4);
-    }
-    else{
-        m_search.rootMin(board, 4);
-    }
-    m_AIMove = m_search.getBestMove().toNotation();
+    m_search.rootMax(board, 5);
+    // if(board.getActivePlayer() == WHITE){
+    //     m_search.rootMax(board, 5);
+    // }
+    // else{
+    //     m_search.rootMin(board, 5);
+    // }
+    // m_AIMove = m_search.getBestMove().toNotation();
+
+    // m_AIMove += moveGen.toNotation(m_search.getBestMove().getFrom());
+    // m_AIMove += "-";
+    // m_AIMove += moveGen.toNotation(m_search.getBestMove().getTo());
 }

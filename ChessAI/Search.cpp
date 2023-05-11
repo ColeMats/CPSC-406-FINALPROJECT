@@ -28,48 +28,95 @@ void Search::rootMin(Board &board, int depth){
     m_bestScore = minimax(board, depth, alpha, beta, board.getActivePlayer());
 }
 
+// int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
+//     MoveGen moves(board);
+//     MoveList legalMoves = moves.getLegalMoves();
+    
+//     if (depth == 0 || legalMoves.size() == 0) {
+//         return evaluate(board);
+//     }
+
+//     int bestScore = color == BLACK ? -INF : INF;
+
+//     for (int i = 0; i < legalMoves.size(); ++i) {
+//         Move move = legalMoves[i];
+//         Board movedBoard = board;
+//         movedBoard.doMove(move);
+//         movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
+//         TreeNode* childNode = new TreeNode();
+//         m_tree.addChild(board.getTreeNode(), move.toNotation(), childNode);
+//         movedBoard.setTreeNode(childNode);
+
+//         int score = minimax(movedBoard, depth - 1, alpha, beta, movedBoard.getActivePlayer());
+
+//         if (color == BLACK) {
+//             if (score > bestScore) {
+//                 bestScore = score;
+//                 if (depth == 5) {
+//                     m_bestMove = move;
+//                 }
+//             }
+//             alpha = fmax(alpha, score);
+//         } else {
+//             if (score < bestScore) {
+//                 bestScore = score;
+//             }
+//             beta = fmin(beta, score);
+//         }
+
+//         if (beta <= alpha) {
+//             break; // Alpha-beta pruning
+//         }
+//     }
+
+//     return bestScore;
+// }
+
 int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
+    cout << "minmax function";
     MoveGen moves(board);
     MoveList legalMoves = moves.getLegalMoves();
-    
-    if (depth == 0 || legalMoves.size() == 0) {
+
+    if (depth == 0 || (legalMoves.size() == 0)) {
         return evaluate(board);
     }
 
-    int bestScore = color == BLACK ? -INF : INF;
-
-    for (int i = 0; i < legalMoves.size(); ++i) {
-        Move move = legalMoves[i];
-        Board movedBoard = board;
-        movedBoard.doMove(move);
-        movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
-        TreeNode* childNode = new TreeNode();
-        m_tree.addChild(board.getTreeNode(), move.toNotation(), childNode);
-        movedBoard.setTreeNode(childNode);
-
-        int score = minimax(movedBoard, depth - 1, alpha, beta, movedBoard.getActivePlayer());
-
-        if (color == BLACK) {
-            if (score > bestScore) {
-                bestScore = score;
-                if (depth == 5) {
+    if (color == BLACK) {
+        int maxEval = -INF;
+        for (int i = 0; i < legalMoves.size(); ++i) {
+            Move move = legalMoves[i];
+            Board movedBoard = board;
+            movedBoard.doMove(move);
+            movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
+            int eval = minimax(movedBoard,(depth-1), alpha, beta, movedBoard.getActivePlayer());
+            if (eval > maxEval) {
+                maxEval = eval;
+                if (depth == 5) { // Update best move only for the root node
                     m_bestMove = move;
                 }
             }
-            alpha = fmax(alpha, score);
-        } else {
-            if (score < bestScore) {
-                bestScore = score;
+            alpha = max(alpha, eval);
+            if (beta <= alpha) {
+                break; // Alpha-beta pruning
             }
-            beta = fmin(beta, score);
         }
-
-        if (beta <= alpha) {
-            break; // Alpha-beta pruning
+        return maxEval;
+    } else {
+        int minEval = INF;
+        for (int i = 0; i < legalMoves.size(); ++i) {
+            Move move = legalMoves[i];
+            Board movedBoard = board;
+            movedBoard.doMove(move);
+            movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
+            int eval = minimax(movedBoard, (depth-1), alpha, beta, movedBoard.getActivePlayer());
+            minEval = min(minEval, eval);
+            beta = min(beta, eval);
+            if (beta <= alpha) {
+                break; // Alpha-beta pruning
+            }
         }
+        return minEval;
     }
-
-    return bestScore;
 }
 
 

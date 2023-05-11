@@ -5,7 +5,7 @@
 
 
 int main(){
-
+    cout << "prompt -2";
     
     // char testBoard[8][8] =
     //     {
@@ -30,8 +30,9 @@ int main(){
             { 'p',  'p',  'p',  'p',   0x20,  'p',  'p',  'p' },
             { 'r',  'n',  'b',  'q',   'k',  'b',  'n',  'r' },
         };
-
+    cout << "prompt -1";
     AI ai(testBoard);
+    cout << "prompt 1";
     std::cout << ai.getAIMove() << std::endl;
     
 

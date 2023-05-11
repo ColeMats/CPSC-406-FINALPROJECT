@@ -24,6 +24,7 @@ class AI{
         static const int DEFAULT_DEPTH = 5;
         static const int MAX_DEPTH = 10;
         static const int MIN_DEPTH = 3;
+        Search m_search;
 };
 
 #endif

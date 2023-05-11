@@ -7,7 +7,6 @@ AI::AI(char board[8][8]){
     Board currBoard(board, BLACK);
     m_AIMove = "";
     start(currBoard);
-    
 }
 
 std::string AI::getAIMove(){
@@ -18,8 +17,8 @@ void AI::start(Board &board){
     // Search search(board);
     // search.rootMax(board, DEFAULT_DEPTH);
     // m_AIMove = search.getBestMove();
-
-    getAIMoveBasic(board);
+    getAIMoveMinimax(board);
+    //getAIMoveBasic(board);
 }
 
 void AI::getAIMoveBasic(Board &board){
@@ -45,3 +44,12 @@ void AI::getAIMoveBasic(Board &board){
     m_AIMove += moveGen.toNotation(bestMove.getTo());
 }
 
+void AI::getAIMoveMinimax(Board &board){
+    if(board.getActivePlayer() == WHITE){
+        m_search.rootMax(board, 4);
+    }
+    else{
+        m_search.rootMin(board, 4);
+    }
+    m_AIMove = m_search.getBestMove().toNotation();
+}

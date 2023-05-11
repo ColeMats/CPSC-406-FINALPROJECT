@@ -21,6 +21,13 @@ void Search::rootMax(Board &board, int depth){
     m_bestScore = minimax(board, depth, alpha, beta, board.getActivePlayer());
 }
 
+void Search::rootMin(Board &board, int depth){
+    int alpha = INF;
+    int beta = -INF;
+
+    m_bestScore = minimax(board, depth, alpha, beta, board.getActivePlayer());
+}
+
 int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
     MoveGen moves(board);
     MoveList legalMoves = moves.getLegalMoves();

@@ -24,7 +24,10 @@ class Search{
 
         //void rootMax(Board &board, int depth);
         int minimax(Board &board, int depth, int alpha, int beta, Color color);
-
+        // starts search algorithm
+        // finds bestMove out of all possible moves
+        void rootMax(Board &board, int depth);
+        void rootMin(Board &board, int depth);
     private:
         static const int DEFAULT_DEPTH = 7;
         static const int MAX_DEPTH = 10;
@@ -32,10 +35,6 @@ class Search{
 
         Move m_bestMove;
         int m_bestScore;
-
-        // starts search algorithm
-        // finds bestMove out of all possible moves
-        void rootMax(Board &board, int depth);
 
         // maxiplayer = true false --> BLACK == true, WHITE == false (based on next player's move)
         Tree m_tree;

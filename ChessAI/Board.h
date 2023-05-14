@@ -159,6 +159,7 @@ class Board{
         // implementing tree functions
         TreeNode* getTreeNode();
         void setTreeNode(TreeNode* treeNode);
+        bool isValid() const;
 
     private:
         char m_board[8][8];

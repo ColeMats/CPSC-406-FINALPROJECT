@@ -4,7 +4,6 @@
 // basically have this file run through all the choices, pick the best move, and return the string "move-move" format via getBestMove();
 
 AI::AI(char board[8][8]){
-    cout << "prompt 0";
     Board currBoard(board, BLACK);
     m_search = Search(currBoard); // Initialize the Search object with currBoard
     m_AIMove = "";
@@ -19,8 +18,16 @@ void AI::start(Board &board){
     // Search search(board);
     // search.rootMax(board, DEFAULT_DEPTH);
     // m_AIMove = search.getBestMove();
-    getAIMoveMinimax(board);
-    //getAIMoveBasic(board);
+    int userInput;
+    std::cout << "1 for ai move, 2 for basic" << endl;
+    std::cin >> userInput;
+    if (userInput == 1) {
+        cout << "checkpoint 0" << endl;
+        getAIMoveMinimax(board);
+    } else if (userInput == 2) {
+        cout << "checkpoint 0" << endl;
+        getAIMoveBasic(board);
+    }
 }
 
 void AI::getAIMoveBasic(Board &board){
@@ -48,7 +55,8 @@ void AI::getAIMoveBasic(Board &board){
 }
 
 void AI::getAIMoveMinimax(Board &board){
-    m_search.rootMax(board, 5);
+    cout << "checkpoint 1" << endl;
+    m_search.rootMax(board, 1);
     // if(board.getActivePlayer() == WHITE){
     //     m_search.rootMax(board, 5);
     // }

@@ -438,3 +438,18 @@ TreeNode* Board::getTreeNode() {
 void Board::setTreeNode(TreeNode* treeNode) {
     m_treeNode = treeNode;
 }
+
+bool Board::isValid() const {
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
+            char piece = m_board[i][j];
+            if(piece != 'p' && piece != 'n' && piece != 'r' && piece != 'b' && piece != 'q' && piece != 'k' &&
+               piece != 'P' && piece != 'N' && piece != 'R' && piece != 'B' && piece != 'Q' && piece != 'K' &&
+               piece != 0x20) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}

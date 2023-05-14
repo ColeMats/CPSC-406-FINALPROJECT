@@ -1,9 +1,8 @@
-
 #include "Search.h"
 
 Search::Search(Board &board){
     Move m_bestMove = Move();
-    m_tree.setRoot(new TreeNode());
+    // m_tree.setRoot(new TreeNode());
 }
 
 Move Search::getBestMove(){
@@ -15,83 +14,48 @@ int Search::getBestScore(){
 }
 
 void Search::rootMax(Board &board, int depth){
+    cout << "checkpoint 2" << endl;
     int alpha = -INF;
     int beta = INF;
-
-    m_bestScore = minimax(board, depth, alpha, beta, board.getActivePlayer());
+    cout << "checkpoint 3" << endl;
+    cout << board.isValid() << endl;
+    cout << "checkpoint 4" << endl;
+    int eval = minimax(board, depth, alpha, beta, board.getActivePlayer());
+    cout << eval << endl;
 }
 
 void Search::rootMin(Board &board, int depth){
+    cout << "checkpoint 2" << endl;
     int alpha = INF;
     int beta = -INF;
-
+    cout << "checkpoint 3" << endl;
     m_bestScore = minimax(board, depth, alpha, beta, board.getActivePlayer());
 }
 
-// int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
-//     MoveGen moves(board);
-//     MoveList legalMoves = moves.getLegalMoves();
-    
-//     if (depth == 0 || legalMoves.size() == 0) {
-//         return evaluate(board);
-//     }
-
-//     int bestScore = color == BLACK ? -INF : INF;
-
-//     for (int i = 0; i < legalMoves.size(); ++i) {
-//         Move move = legalMoves[i];
-//         Board movedBoard = board;
-//         movedBoard.doMove(move);
-//         movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
-//         TreeNode* childNode = new TreeNode();
-//         m_tree.addChild(board.getTreeNode(), move.toNotation(), childNode);
-//         movedBoard.setTreeNode(childNode);
-
-//         int score = minimax(movedBoard, depth - 1, alpha, beta, movedBoard.getActivePlayer());
-
-//         if (color == BLACK) {
-//             if (score > bestScore) {
-//                 bestScore = score;
-//                 if (depth == 5) {
-//                     m_bestMove = move;
-//                 }
-//             }
-//             alpha = fmax(alpha, score);
-//         } else {
-//             if (score < bestScore) {
-//                 bestScore = score;
-//             }
-//             beta = fmin(beta, score);
-//         }
-
-//         if (beta <= alpha) {
-//             break; // Alpha-beta pruning
-//         }
-//     }
-
-//     return bestScore;
-// }
-
 int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
-    cout << "minmax function";
+    cout << "minmax function" << endl;
     MoveGen moves(board);
     MoveList legalMoves = moves.getLegalMoves();
 
+    cout << depth << endl;    
     if (depth == 0 || (legalMoves.size() == 0)) {
-        return evaluate(board);
+        cout << "finished" << endl;
+        return evaluate(board); // Negate the evaluation score
     }
 
-    if (color == BLACK) {
+    cout << "if" << endl;
+    if (color == WHITE) { // The maximizing player is now WHITE
         int maxEval = -INF;
         for (int i = 0; i < legalMoves.size(); ++i) {
             Move move = legalMoves[i];
             Board movedBoard = board;
+            cout << "white" << endl;
             movedBoard.doMove(move);
             movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
             int eval = minimax(movedBoard,(depth-1), alpha, beta, movedBoard.getActivePlayer());
             if (eval > maxEval) {
                 maxEval = eval;
-                if (depth == 5) { // Update best move only for the root node
+                if (depth == 2) { // Update best move only for the root node
                     m_bestMove = move;
                 }
             }
@@ -101,13 +65,15 @@ int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
             }
         }
         return maxEval;
-    } else {
+    } else { // The minimizing player is now BLACK
         int minEval = INF;
         for (int i = 0; i < legalMoves.size(); ++i) {
             Move move = legalMoves[i];
             Board movedBoard = board;
+            cout << "black" << endl;
             movedBoard.doMove(move);
             movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
+            
             int eval = minimax(movedBoard, (depth-1), alpha, beta, movedBoard.getActivePlayer());
             minEval = min(minEval, eval);
             beta = min(beta, eval);
@@ -119,15 +85,10 @@ int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
     }
 }
 
-
 int Search::evaluate(Board &board){
     int blackScore = countMaterialsOnBoard(board, BLACK);
     int whiteScore = countMaterialsOnBoard(board, WHITE);
-    int evaluation = blackScore - whiteScore;
-    if(board.getActivePlayer() == WHITE){
-        return evaluation * -1;
-    }
-    return evaluation;
+    return whiteScore - blackScore; // Higher score is better for WHITE
 }
 
 int Search::countMaterialsOnBoard(Board &board, Color color){
@@ -136,6 +97,7 @@ int Search::countMaterialsOnBoard(Board &board, Color color){
     total += board.getRookLocations(color).size() * 5;
     total += board.getBishopLocations(color).size() * 3;
     total += board.getKnightLocations(color).size() * 3;
-    if(board.isQueenActive(color)) total += 9;
+    if(board.isQueenActive(color)) 
+        total += 9;
     return total;
 }

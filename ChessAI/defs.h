@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <limits.h>
+#include <limits>
 
 enum Color{
     WHITE,

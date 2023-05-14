@@ -27,6 +27,7 @@ void MoveGen::setBoard(Board &board){
     m_moves = MoveList();
     m_legalMoves = MoveList();
     genMoves(board);
+
 }
 
 void MoveGen::printBoard(Board &board){
@@ -164,11 +165,13 @@ void MoveGen::genMoves(Board &board){
     }
     else if(board.getActivePlayer() == WHITE){
         genWhitePawnMoves(board);
+
     }
     genRookMoves(board);
     genBishopMoves(board);
     genKnightMoves(board);
     genKingMoves(board);
+    genQueenMoves(board);
     genLegalMoves(board);
 }
 
@@ -385,107 +388,79 @@ void MoveGen::genHorizontalSlideMoves(Board &board, Position pos, PieceType type
 }
 
 void MoveGen::genDiagonalSlidemoves(Board &board, Position pos, PieceType type){
-    int row = pos.iRow;
-    int col = pos.iCol;
-    int rowOffset = 1;
-    int colOffset = 1;
-    bool cont = true;
-    bool leftback, leftfront, rightback, rightforward = true;
+    int i = pos.iRow;
+    int j = pos.iCol;
+    // int rowOffset = 1;
+    // int colOffset = 1;
+    // bool cont = true;
+    // bool leftback, leftfront, rightback, rightforward = true;
     Color victimColor = board.getOppositeColor(board.getActivePlayer());
-    while(cont){
-        Position to;
-        if((row+rowOffset) <= 7){
-            if((col + colOffset <= 7) && rightback){
-                if(board.getColorAtLoc(row+rowOffset, col+colOffset) == victimColor){
-                    to.iRow = row+rowOffset;
-                    to.iCol = col+colOffset;
-                    Move move = Move(pos, to, type);
-                    move.setCapturedPieceType(board.getPieceAtLocation(row+rowOffset, col+colOffset));
-                    m_moves.push_back(move);
-                    rightback = false;
-                }
-                else if(board.isEmptySquare(row+rowOffset, col+colOffset)){
-                    to.iRow = row+rowOffset;
-                    to.iCol = col+colOffset;
-                    m_moves.push_back(Move(pos, to, type));
-                }
-                else{
-                    rightback = false;
-                }
-            }
-            else{
-                rightback = false;
-            }
-            if((col-colOffset >= 0) && leftback){
-                if(board.getColorAtLoc(row+rowOffset, col-colOffset) == victimColor){
-                    to.iRow = row+rowOffset;
-                    to.iCol = col+-colOffset;
-                    Move move = Move(pos, to, type);
-                    move.setCapturedPieceType(board.getPieceAtLocation(row+rowOffset, col-colOffset));
-                    m_moves.push_back(move);
-                    rightback = false;
-                }
-                else if(board.isEmptySquare(row+rowOffset, col-colOffset)){
-                    to.iRow = row+rowOffset;
-                    to.iCol = col-colOffset;
-                    m_moves.push_back(Move(pos, to, type));
-                }
-                else{
-                    leftback = false;
-                }
-            }
-            else{
-                leftback = false;
-            }
+    Position to;
+
+    int k = 1;
+    while(board.inBounds(i-k,j+k) && board.getColorAtLoc(i-k,j+k) != board.getActivePlayer()){
+        if(board.getColorAtLoc(i-k,j+k) == victimColor){
+            to.iRow = i-k;
+            to.iCol = j+k;
+            Move move = Move(pos, to, type);
+            move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+            m_moves.push_back(move);
         }
-        if((row-rowOffset >= 0)){
-            if((col + colOffset <= 7) && rightforward){
-                if(board.getColorAtLoc(row-rowOffset, col+colOffset) == victimColor){
-                    to.iRow = row-rowOffset;
-                    to.iCol = col+colOffset;
-                    Move move = Move(pos, to, type);
-                    move.setCapturedPieceType(board.getPieceAtLocation(row-rowOffset, col+colOffset));
-                    m_moves.push_back(move);
-                    rightforward = false;
-                }
-                else if(board.isEmptySquare(row-rowOffset, col+colOffset)){
-                    to.iRow = row-rowOffset;
-                    to.iCol = col+colOffset;
-                    m_moves.push_back(Move(pos, to, type));
-                }
-                else{
-                    rightforward = false;
-                }
-            }
-            else{
-                rightforward = false;
-            }
-            if((col-colOffset >= 0) && leftfront){
-                if(board.getColorAtLoc(row-rowOffset, col-colOffset) == victimColor){
-                    to.iRow = row-rowOffset;
-                    to.iCol = col+-colOffset;
-                    Move move = Move(pos, to, type);
-                    move.setCapturedPieceType(board.getPieceAtLocation(row-rowOffset, col-colOffset));
-                    m_moves.push_back(move);
-                    leftfront = false;
-                }
-                else if(board.isEmptySquare(row-rowOffset, col-colOffset)){
-                    to.iRow = row-rowOffset;
-                    to.iCol = col-colOffset;
-                    m_moves.push_back(Move(pos, to, type));
-                }
-                else{
-                    leftfront = false;
-                }
-            }
-            else{
-                leftfront = false;
-            }
+        else if(board.isEmptySquare(i-k,j+k)){
+            to.iRow = i-k;
+            to.iCol = j+k;
+            m_moves.push_back(Move(pos, to, type));
         }
-        if(!rightback && !rightforward && !leftback && !leftfront){
-            cont = false;
-        }
-        rowOffset++;
-        colOffset++;
+        ++k;
     }
+    k = 1;
+    while(board.inBounds(i-k,j-k) && board.getColorAtLoc(i-k,j-k) != board.getActivePlayer()){
+        if(board.getColorAtLoc(i-k,j-k) == victimColor){
+            to.iRow = i-k;
+            to.iCol = j-k;
+            Move move = Move(pos, to, type);
+            move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+            m_moves.push_back(move);
+        }
+        else if(board.isEmptySquare(i-k,j-k)){
+            to.iRow = i-k;
+            to.iCol = j-k;
+            m_moves.push_back(Move(pos, to, type));
+        }
+        ++k;
+    }
+    k=1;
+    while(board.inBounds(i+k,j+k) && board.getColorAtLoc(i+k,j+k) != board.getActivePlayer()){
+        if(board.getColorAtLoc(i+k,j+k) == victimColor){
+            to.iRow = i+k;
+            to.iCol = j+k;
+            Move move = Move(pos, to, type);
+            move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+            m_moves.push_back(move);
+        }
+        else if(board.isEmptySquare(i+k,j+k)){
+            to.iRow = i+k;
+            to.iCol = j+k;
+            m_moves.push_back(Move(pos, to, type));
+        }
+        ++k;
+    }
+    k=1;
+    while(board.inBounds(i+k,j-k) && board.getColorAtLoc(i+k,j-k) != board.getActivePlayer()){
+        if(board.getColorAtLoc(i+k,j-k) == victimColor){
+            to.iRow = i+k;
+            to.iCol = j-k;
+            Move move = Move(pos, to, type);
+            move.setCapturedPieceType(board.getPieceAtLocation(to.iRow, to.iCol));
+            m_moves.push_back(move);
+        }
+        else if(board.isEmptySquare(i+k,j-k)){
+            to.iRow = i+k;
+            to.iCol = j-k;
+            m_moves.push_back(Move(pos, to, type));
+        }
+        ++k;
+    }
+
+
 }

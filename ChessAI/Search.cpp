@@ -35,6 +35,7 @@ void Search::rootMin(Board &board, int depth){
 int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
     cout << "minmax function" << endl;
     MoveGen moves(board);
+    
     MoveList legalMoves = moves.getLegalMoves();
 
     cout << depth << endl;    
@@ -73,6 +74,8 @@ int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
             cout << "black" << endl;
             movedBoard.doMove(move);
             movedBoard.setActivePlayer(movedBoard.getOppositeColor(movedBoard.getActivePlayer()));
+            
+            
             
             int eval = minimax(movedBoard, (depth-1), alpha, beta, movedBoard.getActivePlayer());
             minEval = min(minEval, eval);

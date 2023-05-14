@@ -31,6 +31,10 @@ int main(){
 
     AI ai(testBoard);
     std::cout << ai.getAIMove() << std::endl;
+
+    // Board board(testBoard, BLACK);
+    // MoveGen moveGen(board);
+    // moveGen.printLegalMoves();
     
 
     /*

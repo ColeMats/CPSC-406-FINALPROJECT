@@ -30,7 +30,7 @@ int main(){
         };
 
     AI ai(testBoard);
-    std::cout << ai.getAIMove() << std::endl;
+    cout << "the best move in this situation is: " << ai.getAIMove() << std::endl;
 
     // Board board(testBoard, BLACK);
     // MoveGen moveGen(board);

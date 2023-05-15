@@ -22,10 +22,8 @@ void AI::start(Board &board){
     std::cout << "1 for ai move, 2 for basic" << endl;
     std::cin >> userInput;
     if (userInput == 1) {
-        cout << "checkpoint 0" << endl;
         getAIMoveMinimax(board);
     } else if (userInput == 2) {
-        cout << "checkpoint 0" << endl;
         getAIMoveBasic(board);
     }
 }
@@ -55,15 +53,14 @@ void AI::getAIMoveBasic(Board &board){
 }
 
 void AI::getAIMoveMinimax(Board &board){
-    cout << "checkpoint 1" << endl;
-    m_search.rootMax(board, 1);
+    m_search.rootMax(board, 5);
     // if(board.getActivePlayer() == WHITE){
     //     m_search.rootMax(board, 5);
     // }
     // else{
     //     m_search.rootMin(board, 5);
     // }
-    // m_AIMove = m_search.getBestMove().toNotation();
+    m_AIMove = m_search.getBestMove().toNotation();
 
     // m_AIMove += moveGen.toNotation(m_search.getBestMove().getFrom());
     // m_AIMove += "-";

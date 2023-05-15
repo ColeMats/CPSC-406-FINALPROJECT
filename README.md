@@ -85,6 +85,15 @@
     - removed parameters (to void)
     - AI move selected by functions in chess.cpp
     - AI's move parsed into Positions "from" and "to"
+
+04/06/2023 - 04/08/2023 - Tally
+- Generation and move generation testing
+
+05/06/2023 - 05/08/2023 - Tally
+- Finished move generation, started move analysis/search
+
+05/12/2023 - 05/14/2023 - Tally
+- Integrated AI into game, helped finalize the project
     
 ## PROGRESS SINCE WEEK 4
 Our goal for the MVP was to have a chess engine that plays moves based on tree generation, either randomly or using alpha-beta pruning. While we have not fully developed tree generation and random/calculated move selection, we were able to create a chess engine that is playable in the console. Our chess engine, at present, has AI move generation, but the move generator is not complete. It also does not consider all valid moves for a given piece. Instead, the first valid move found for each piece being considered is the only move associated with that piece. The move generator and tree generation still needs work in order to make the AI make good moves, not just valid moves.

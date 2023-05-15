@@ -92,6 +92,16 @@
 05/06/2023 - 05/08/2023 - Tally
 - Finished move generation, started move analysis/search
 
+05/08/2023 - 05/12/2023 - Alan
+- Started & finished min max algorithm with Tree
+- Started and finished alpha beta pruning
+- Integrated AI into game, helped finalize the project
+
+05/12/2023 - 05/14/2023 - Alan
+- fixed issue with alpha beta pruning
+- ran test that showed that code was faster + less seg faults without tree saving + deleting data
+- Removed tree saving w/ alpha beta pruning. Now consistent 5+ levels of depth
+
 05/12/2023 - 05/14/2023 - Tally
 - Integrated AI into game, helped finalize the project
     

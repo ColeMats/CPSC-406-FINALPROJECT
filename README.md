@@ -17,15 +17,29 @@
 - main.cpp
 
 ## Known Issues/Deviations
-- the representation of the board in the terminal is not complete. "?" appear rather than black and white tiles
-- Move generation not complete. The computer can move only pawns, rooks, or bishops. Movement of these pieces is limited, and does not consider all valid moves by each piece.
-- use of Tree data structure for move generation not yet implemented
-- Game not yet tested beyond a few moves
+- the representation of the board in the terminal is only compatible with a windows terminal (white and black squares)
+    - the white and black squares appear as question marks in a mac terminal.  
+    - This was an issue researched by the team but no solution was found.
 - 
 
 ## References
-- Chess Engine within console
-    - https://github.com/jeromevonk/chess_console
+- Chess Game within console https://github.com/jeromevonk/chess_console
+    - Chess game was used as a foundation, found by Cole and Chris.  
+    - This game was used to implement basic move rules and game rules 
+    - This game is stricly player vs player 
+    - Functions were added to make game usable by backend team that implemented AI algorithm to play against a user
+
+- Chess video tutorials to get a grasp of different approaches to programming chess AI 
+    - https://www.youtube.com/watch?v=U4ogK0MIzqk&t=393s&ab_channel=SebastianLague
+    - https://www.youtube.com/watch?v=_4EuZI8Q8cs&ab_channel=FamTrinli
+
+- Other websites used to get a grasp on how to program chess engines
+    - https://www.freecodecamp.org/news/simple-chess-ai-step-by-step-1d55a9266977/
+
+- Literature Review to use as a foundation for min/max algorithms with alpha-beta pruning
+    - https://ieeexplore.ieee.org/document/9510148
+    - https://www.chessprogramming.org/Main_Page
+
 
 ## Instructions
 - to run chess game:
@@ -76,14 +90,9 @@
 Our goal for the MVP was to have a chess engine that plays moves based on tree generation, either randomly or using alpha-beta pruning. While we have not fully developed tree generation and random/calculated move selection, we were able to create a chess engine that is playable in the console. Our chess engine, at present, has AI move generation, but the move generator is not complete. It also does not consider all valid moves for a given piece. Instead, the first valid move found for each piece being considered is the only move associated with that piece. The move generator and tree generation still needs work in order to make the AI make good moves, not just valid moves.
 
 This current version (as of 04.02.2023) includes the chess engine as pvp instead of player vs AI.  The move generation is a work in progress but has not been implemented into the chess engine.  Right now, the game is set up to be player vs player, with move generations being made in another class.  This is a step in our future plan to properly implement the generated moves into the engine so that the game can be played as player vs AI.  While we did fall short of our MVP, the process gave us a better perspective on how we want to continue the rest of the project.
+
 ## FUTURE PLANS 
-- NEED to make a new feature where player and AI are identified and make use of getCurrentTurn to see which method should be called (movePiece || engineMovePiece)
-- get board to print properly
-- re-implement player color choice
-- develop move generation through tree data structure
-- alpha-beta pruning
-- After the tree is properly implemented, we will be switching teams
-    - Alan and Chris will be working on the Front end
-        - Will trying to implement the front end in Unreal Engine since both are game dev minors
-    - Cole and Tally will be working on the back end 
-        - Will be implementing the above features
+- It was suggested to us at the beginning of the project that we could use bit boards instead of characters as a data structure which would make this project more space efficient.
+- Changing tree to store data from hashmap to bitboard
+- Other than the efficiency of the project, we would also like to make it more visually appealing and turn it into its own executable file to use as a game 
+    - Like many games, an idea for future development would be to add difficulties of the chess engine 

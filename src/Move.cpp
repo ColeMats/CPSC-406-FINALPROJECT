@@ -105,6 +105,7 @@ std::string Move::toNotation() const {
     std::string uci = "";
     uci += static_cast<char>(m_from.iCol + 'A');
     uci += static_cast<char>(m_from.iRow + '1');
+    uci += "-";
     uci += static_cast<char>(m_to.iCol + 'A');
     uci += static_cast<char>(m_to.iRow + '1');
     return uci;

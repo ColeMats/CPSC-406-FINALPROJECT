@@ -431,13 +431,13 @@ Position Board::getKingLocations(Color pieceColor){
     return kingPos;
 }
 
-TreeNode* Board::getTreeNode() {
-    return m_treeNode;
-}
+// TreeNode* Board::getTreeNode() {
+//     return m_treeNode;
+// }
 
-void Board::setTreeNode(TreeNode* treeNode) {
-    m_treeNode = treeNode;
-}
+// void Board::setTreeNode(TreeNode* treeNode) {
+//     m_treeNode = treeNode;
+// }
 
 bool Board::isValid() const {
     for(int i = 0; i < 8; i++) {

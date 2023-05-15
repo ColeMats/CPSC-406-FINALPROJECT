@@ -1,8 +1,7 @@
 #include "Search.h"
 
 Search::Search(Board &board) : m_bestMove(Move()) {
-    // Move m_bestMove = Move();
-    // m_tree.setRoot(new TreeNode());
+    
 }
 
 Move Search::getBestMove(){
@@ -50,7 +49,7 @@ int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
                     m_bestMove = bestMove;
                 }
             }
-            alpha = max(alpha, eval);
+            alpha = std::max(alpha, eval);
             if (beta <= alpha) {
                 break; 
             }
@@ -72,7 +71,7 @@ int Search::minimax(Board &board, int depth, int alpha, int beta, Color color){
                     m_bestMove = bestMove;
                 }
             }
-            beta = min(beta, eval);
+            beta = std::min(beta, eval);
             if (beta <= alpha) {
                 break;
             }

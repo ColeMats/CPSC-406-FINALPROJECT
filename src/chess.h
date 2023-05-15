@@ -1,7 +1,8 @@
 #pragma once
 #include "includes.h"
-#include "Tree.h"
-#include "TreeNode.h"
+#include "AI.h"
+// #include "Tree.h"
+// #include "TreeNode.h"
 
 class Chess
 {
@@ -144,14 +145,6 @@ public:
 
    Position findKing( int iColor );
 
-   std::string getCompMove(void);
-
-   std::string getPossibleComputerMoves(std::string position);
-
-   std::string getPawnMove(Position currP);
-   std::string getRookMove(Position currP);
-   std::string getBishopMove(Position currP);
-
    void changeTurns( void );
 
    bool isFinished( void );
@@ -168,6 +161,8 @@ public:
 
    void deleteLastMove( void );
 
+   std::string getAIMove();
+
    // Save all the moves
    struct Round
    {
@@ -182,10 +177,12 @@ public:
    std::vector<char> white_captured;
    std::vector<char> black_captured;
 
-private:
-
    // Represent the pieces in the board
    char board[8][8];
+
+private:
+
+
  
    // Undo is possible?
    struct Undo

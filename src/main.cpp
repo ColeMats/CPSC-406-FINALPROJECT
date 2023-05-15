@@ -4,8 +4,9 @@
 #include "chess.h"
 
 #include "debug.h"
-#include "Tree.h"
+// #include "Tree.h"
 
+#include "AI.h"
 #include <iostream>
 //---------------------------------------------------------------------------------------
 // Global variable
@@ -652,31 +653,15 @@ void movePiece(void)
    return;
 }
 
-// std::string getCompMove(void){
-//    TreeNode *comp_pieces = new TreeNode();
-//    for(int i =0; i<8;++i){
-//       for(int j = 0; j<8; ++j){
-//          char tempPiece = current_game->getPieceAtPosition(i,j);
-//          if(islower(tempPiece)){
-//             string loc = "";
-//             loc += (char) (i+'A');
-//             loc += (char) (j + '1');
-//             string p = "";
-//             p += tempPiece;
-//             comp_pieces->set_piece_locations(loc,p);
-
-//          }
-//       }
-//    }
-//    return comp_pieces->choose_rand_key();
-
-// }
-
 
 void engineMovePiece()
 {
    // get computer move
-   std::string compMove = current_game->getCompMove();
+
+   std::string compMove = current_game->getAIMove();
+   std::cout << compMove << std::endl;
+   
+   
    
    // add move to log
    std::string to_record = compMove;

@@ -18,14 +18,17 @@ void AI::start(Board &board){
     // Search search(board);
     // search.rootMax(board, DEFAULT_DEPTH);
     // m_AIMove = search.getBestMove();
-    int userInput;
-    std::cout << "1 for ai move, 2 for basic" << endl;
-    std::cin >> userInput;
-    if (userInput == 1) {
-        getAIMoveMinimax(board);
-    } else if (userInput == 2) {
-        getAIMoveBasic(board);
-    }
+
+    // int userInput;
+    // std::cout << "1 for ai move, 2 for basic" << std::endl;
+    // std::cin >> userInput;
+    // if (userInput == 1) {
+    //     getAIMoveMinimax(board);
+    // } else if (userInput == 2) {
+    //     getAIMoveBasic(board);
+    // }
+
+    getAIMoveMinimax(board);
 }
 
 void AI::getAIMoveBasic(Board &board){

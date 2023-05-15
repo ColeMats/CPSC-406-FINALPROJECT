@@ -2,9 +2,6 @@
 #define MOVEGEN_H
 
 #include <iostream>
-// #include "Tree.h"
-// #include "TreeNode.h"
-// #include "chess.h"
 
 #include "defs.h"
 #include "Move.h"
@@ -14,13 +11,6 @@
 #include <unordered_map>
 
 typedef std::vector<Move> MoveList;
-
-/*
-Things left to do:
-- do white moves
-- think about adding piece type to move
-- fill legal moves list (would moving piece result in check)
-*/
 
 class MoveGen{
     public:
@@ -36,11 +26,6 @@ class MoveGen{
         MoveGen(Board &board, Color activeColor);
         ~MoveGen();
         
-        
-        /* might be necessary later */
-        // static int getPieceColor(char piece); // int piece = piece value
-        // static bool isPlayerPiece(char piece);
-        // static bool isComputerPiece(char piece);
         
         /*
         * initializes MoveLists and calls genMove functions
@@ -65,6 +50,10 @@ class MoveGen{
         */ 
         void genMoves(Board &board);
 
+        /**
+         * @brief finds all legal moves from pseudolegal moves
+         * @param Board board
+         */
         void genLegalMoves(Board &board);
 
         MoveList getLegalMoves();
@@ -120,9 +109,6 @@ class MoveGen{
         int knighRowOffsets[8] = {2, 2, 1, -1, -2, -2, -1, 1};
         int knightColOffsets[8] = {-1, 1, 2, 2, 1, -1, -2, -2};
 
-        // char m_board[8][8];
-
-        // std::unordered_map<char, int> pieceValues;
 
 };
 

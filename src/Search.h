@@ -3,7 +3,8 @@
 #define SEARCH_H
 
 #include "MoveGen.h"
-#include "Tree.h"
+#include <algorithm>
+// #include "Tree.h"
 #include <iostream>
 
 class Search{
@@ -36,8 +37,7 @@ class Search{
         Move m_bestMove;
         int m_bestScore;
         int m_searchDepth;
-        // maxiplayer = true false --> BLACK == true, WHITE == false (based on next player's move)
-        Tree m_tree;
+        
 
 };
 
